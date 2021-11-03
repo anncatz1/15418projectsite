@@ -13,7 +13,7 @@ We will implement 4 versions of the Union-Find (Disjoint Set Union) data structu
 
 We will compare the performances of these implementations against a variety of test inputs and usage scenarios to demonstrate the application of and motivation behind Lock-Free Union-Find. 
 
-BACKGROUND: 
+### BACKGROUND: 
 Union-Find is a tree-based data structure that allows for the efficient querying of connected components within an undirected graph. A connected component is a group of nodes such that every node can reach every other node by traversing a series of edges.
 
 Union-Find uses two basic operations: 
