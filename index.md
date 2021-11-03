@@ -2,7 +2,7 @@
 ## Project Proposal
 Members: Annie Xu, Henry Liu
 
-URL: https://anncatz1.github.io/15418projectsite/
+URL: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/)
 
 ### SUMMARY: 
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
