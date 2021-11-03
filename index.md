@@ -1,10 +1,10 @@
-Project Proposal
-Exploring Concurrent Union-Find
+# Exploring Concurrent Union-Find
+## Project Proposal
 Members: Annie Xu, Henry Liu
 
-URL: Please provide the URL for your project web page.
+URL: https://anncatz1.github.io/15418projectsite/
 
-SUMMARY: 
+### SUMMARY: 
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
 Serial
 Coarse-Grained Locking
@@ -13,7 +13,7 @@ Lock-Free
 
 We will compare the performances of these implementations against a variety of test inputs and usage scenarios to demonstrate the application of and motivation behind Lock-Free Union-Find. 
 
-BACKGROUND: 
+### BACKGROUND: 
 Union-Find is a tree-based data structure that allows for the efficient querying of connected components within an undirected graph. A connected component is a group of nodes such that every node can reach every other node by traversing a series of edges.
 
 Union-Find uses two basic operations: 
@@ -35,13 +35,14 @@ Kruskal’s Algorithm for Minimum-Spanning-Tree
 Tarjan’s Offline Algorithm for Lowest Common Ancestor
 Network Connectivity
 
-THE CHALLENGE: Describe why the problem is challenging. What aspects of the problem might make it difficult to parallelize? In other words, what do you hope to learn by doing the project? 
+### THE CHALLENGE: 
+Describe why the problem is challenging. What aspects of the problem might make it difficult to parallelize? In other words, what do you hope to learn by doing the project? 
 
 • Describe the workload: what are the dependencies, what are its memory access characteristics? (is there locality? is there a high communication to computation ratio?), is there divergent execution? 
 Memory access and synchronization costs will be the most likely reason for poor performance, given the simple nature of most algorithms that use union-find. We want to limit the total amount of memory used and accessed per operation. Additionally, reducing the cache misses was deemed to be the most critical factor for performance of existing algorithms. The computation cost for graphs is fairly small compared to the cost of memory traversals. Contention is fairly limited for most scenarios. 
 • Describe constraints: What are the properties of the system that make mapping the workload to it challenging? 
 
-RESOURCES: 
+### RESOURCES: 
 We have several research papers that analyze different algorithms for different concurrency methods for union find. The first paper “In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval describes optimizing sequential implementations using different linking strategies between nodes (to determine the parent of each node) and various methods of path compaction. In addition, they provide pseudo-code for concurrent union find with Boruvka’s algorithm using priority ranking and path compression. We will utilize this pseudo-code as a starting point to write our code. In addition, the other papers describe lock-free implementations with several different algorithms - they include pseudo-code as well. 
 
 “In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval: https://drops.dagstuhl.de/opus/volltexte/2020/11801/pdf/LIPIcs-OPODIS-2019-15.pdf.
@@ -54,7 +55,7 @@ https://dl.acm.org/doi/pdf/10.1145/103418.103458?casa_token=lOG4EgnOJ7UAAAAA:AVK
 “An Optimized Union-Find Algorithm for Connected Components Labeling Using GPUs”
 https://arxiv.org/pdf/1708.08180.pdf
 
-GOALS AND DELIVERABLES: 
+### GOALS AND DELIVERABLES: 
 Plan to achieve: We plan to implement different versions of union-find and run enough performance measurements on different test cases in order to find the fastest algorithm/implementations. We will also try to discover whether it is worthwhile to use the lock-free version of union-find given the trade-offs in performance.
 We plan to write at least 1 version for sequential, coarse-grained locking, fine-grained locking, and lock-free union-find in order to compare performance between them. If we have time, we can explore multiple different algorithms and optimizations. 
 Hope to achieve: Concurrent Union-find with delete, CUDA union-find
@@ -64,64 +65,37 @@ We are hoping to learn which of the four methods (lock free, coarse-grain lockin
 
 PLATFORM CHOICE: We will implement the 4 main versions, and the testing code all in C++. Also, we will use CUDA to write a GPU-based union find, if we get around to it.
 
-SCHEDULE: 
+### SCHEDULE: 
+```markdown
 Week 1: Oct 31 - Nov 6
-Due: Proposal due Nov 3rd
-Come up with test cases 
-Test sequential on the test cases
-Implement coarse-grained and test 
+**Due: Proposal due Nov 3rd**
+- Come up with test cases 
+- Test sequential on the test cases
+- Implement coarse-grained and test 
 
 Week 2: Nov 7 - Nov 13
-Do Fine-grained 
+- Do Fine-grained 
 
 Week 3: Nov 14 - Nov 20
-Do Lock-free
+- Do Lock-free
 
 Week 4: Nov 21 - Nov 27
-Due: Project Checkpoint Nov 22
-Finish testing 
+- **Due: Project Checkpoint Nov 22**
+- Finish testing 
 
 Week 5: Nov 28 - Dec 4
-Write paper
+- Write paper
 
 Week 6: Dec 5 - Dec 11
-Due: Final project report Dec 9
-Due: Poster session Dec 10
-
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/anncatz1/15418projectsite/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
+- **Due: Final project report Dec 9**
+- **Due: Poster session Dec 10**
+```
 
 1. Numbered
 2. List
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+Markdown: [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/). 
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/anncatz1/15418projectsite/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Documentation: [documentation](https://docs.github.com/categories/github-pages-basics/). 
