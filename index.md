@@ -41,19 +41,18 @@ We also aim to learn exactly how lock-free union-find works. This will involve l
 ### RESOURCES: 
 We have several research papers that analyze different algorithms for different concurrency methods for union find. The first paper “In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval describes optimizing sequential implementations using different linking strategies between nodes (to determine the parent of each node) and various methods of path compaction. In addition, they provide pseudo-code for concurrent union find with Boruvka’s algorithm using priority ranking and path compression. We will utilize this pseudo-code as a starting point to write our code. In addition, the other papers describe lock-free implementations with several different algorithms - they include pseudo-code as well. The papers on lock-free implementations describe very clearly the data structures and algorithms for merging and path compression and the like, which we will build off of for our own lock-free implementation. 
 
-“In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval: https://drops.dagstuhl.de/opus/volltexte/2020/11801/pdf/LIPIcs-OPODIS-2019-15.pdf.
+[“In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval](https://drops.dagstuhl.de/opus/volltexte/2020/11801/pdf/LIPIcs-OPODIS-2019-15.pdf)
 
-“A Lock-Free Implementation of Union-Find” by Maroš Tkáčik: https://is.muni.cz/th/kpdej/BakalarkaDigital.pdf
+[“A Lock-Free Implementation of Union-Find” by Maroš Tkáčik](https://is.muni.cz/th/kpdej/BakalarkaDigital.pdf)
 
-“Wait-free Parallel Algorithms for the Union–Find Problem” by Anderson and Woll: 
-https://dl.acm.org/doi/pdf/10.1145/103418.103458?casa_token=lOG4EgnOJ7UAAAAA:AVK_CpoiZc8kYaXNPY9hXl3faTqzyNOKxASFH1wfMOVMbYYE-Vpxecxfc6eg1dNTsZSCx9OJCwsf
+[“Wait-free Parallel Algorithms for the Union–Find Problem” by Anderson and Woll](https://dl.acm.org/doi/pdf/10.1145/103418.103458?casa_token=lOG4EgnOJ7UAAAAA:AVK_CpoiZc8kYaXNPY9hXl3faTqzyNOKxASFH1wfMOVMbYYE-Vpxecxfc6eg1dNTsZSCx9OJCwsf)
 
-“An Optimized Union-Find Algorithm for Connected Components Labeling Using GPUs”
-https://arxiv.org/pdf/1708.08180.pdf
+[“An Optimized Union-Find Algorithm for Connected Components Labeling Using GPUs” by Jun, et al](https://arxiv.org/pdf/1708.08180.pdf)
 
 ### GOALS AND DELIVERABLES: 
 **Plan to achieve:** We plan to implement different versions of union-find and run enough performance measurements on different test cases in order to find the fastest algorithm/implementations. We will also try to discover whether it is worthwhile to use the lock-free version of union-find given the trade-offs in performance.
 We plan to write at least 1 version for sequential, coarse-grained locking, fine-grained locking, and lock-free union-find in order to compare performance between them. If we have time, we can explore multiple different algorithms and optimizations. 
+
 **Hope to achieve:** Concurrent Union-find with delete, CUDA union-find
 
 For the poster session, we will describe how we implemented our different versions, spending attention on the lock-free version. We will show different performance speedup graphs examining different algorithms/implementations and optimizations used. 
@@ -84,5 +83,6 @@ Week 5: Nov 28 - Dec 4
 - Write paper
 
 Week 6: Dec 5 - Dec 11
+- Finish paper, make poster
 - **Due: Final project report Dec 9**
 - **Due: Poster session Dec 10**
