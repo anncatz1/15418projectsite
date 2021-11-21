@@ -1,9 +1,9 @@
 # Exploring Concurrent Union-Find
 Members: Annie Xu, Henry Liu
 
-Proposal: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/proposal)
+[Proposal:](https://anncatz1.github.io/15418projectsite/proposal)
 
-Milestone Rreport: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/midreport)
+[Milestone Report:](https://anncatz1.github.io/15418projectsite/midreport)
 
 ### SUMMARY OF PROJECT
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
