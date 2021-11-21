@@ -10,7 +10,7 @@ Members: Annie Xu, Henry Liu
 
 [Home](https://anncatz1.github.io/15418projectsite/)
 
-[Midway Report](https://anncatz1.github.io/15418projectsite/midreport)
+[Milestone Report](https://anncatz1.github.io/15418projectsite/midreport)
 
 ### SUMMARY
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
