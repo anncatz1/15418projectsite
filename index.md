@@ -5,7 +5,7 @@ Members: Annie Xu, Henry Liu
 
 [Milestone Report](https://anncatz1.github.io/15418projectsite/midreport)
 
-### SUMMARY OF PROJECT
+### Project Summary
 We will implement 3 versions of the Union-Find (Disjoint Set Union) data structure:
 1. Serial
 2. Coarse-Grained Locking
@@ -13,7 +13,7 @@ We will implement 3 versions of the Union-Find (Disjoint Set Union) data structu
 
 We will compare the performances of these implementations against a variety of test inputs and usage scenarios to demonstrate the application of and motivation behind Lock-Free Union-Find. 
 
-### SCHEDULE: 
+### Schedule 
 
 Week 1: Oct 31 - Nov 6
 - **Due: Proposal due Nov 3rd**
