@@ -1,6 +1,8 @@
+---
 layout: page
 title: "Project Proposal"
 permalink: /proposal/
+---
 
 # Exploring Concurrent Union-Find
 ## Project Proposal
