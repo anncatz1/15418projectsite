@@ -1,10 +1,10 @@
 # Exploring Concurrent Union-Find
-## Project Proposal
 Members: Annie Xu, Henry Liu
 
-URL: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/)
+Proposal: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/proposal)
+Milestone Rreport: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/midreport)
 
-### SUMMARY
+### SUMMARY OF PROJECT
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
 1. Serial
 2. Coarse-Grained Locking
