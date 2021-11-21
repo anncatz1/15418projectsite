@@ -9,7 +9,8 @@ theme: jekyll-theme-cayman
 ## Project Proposal
 Members: Annie Xu, Henry Liu
 
-URL: [anncatz1.github.io/15418projectsite](https://anncatz1.github.io/15418projectsite/)
+[Home](https://anncatz1.github.io/15418projectsite/)
+[Midway Report](https://anncatz1.github.io/15418projectsite/midreport)
 
 ### SUMMARY
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
