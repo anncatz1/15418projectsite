@@ -2,6 +2,7 @@
 layout: page
 title: "Project Proposal"
 permalink: /proposal/
+theme: jekyll-theme-cayman
 ---
 
 # Exploring Concurrent Union-Find
