@@ -1,9 +1,9 @@
 # Exploring Concurrent Union-Find
 Members: Annie Xu, Henry Liu
 
-[Proposal:](https://anncatz1.github.io/15418projectsite/proposal)
+[Proposal](https://anncatz1.github.io/15418projectsite/proposal)
 
-[Milestone Report:](https://anncatz1.github.io/15418projectsite/midreport)
+[Milestone Report](https://anncatz1.github.io/15418projectsite/midreport)
 
 ### SUMMARY OF PROJECT
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
@@ -18,19 +18,19 @@ We will compare the performances of these implementations against a variety of t
 
 Week 1: Oct 31 - Nov 6
 - **Due: Proposal due Nov 3rd**
-- Come up with test cases 
-- Test sequential on the test cases
-- Implement coarse-grained and test 
+- Implement sequential, come up with test case ideas 
 
 Week 2: Nov 7 - Nov 13
-- Do Fine-grained 
+- Create test case repository
+- Implement Coarse-grain locking version
 
 Week 3: Nov 14 - Nov 20
-- Do Lock-free
+- Implement Lock-free (draft)
+- Test sequential/coarse-grain on the test cases
 
 Week 4: Nov 21 - Nov 27
 - **Due: Project Checkpoint Nov 22**
-- Finish testing 
+- Make sure lock-free is correct, finish testing lock-free/other vers
 
 Week 5: Nov 28 - Dec 4
 - Write paper
