@@ -2,14 +2,14 @@
 layout: default
 title: "Milestone Report"
 permalink: /midreport/
-theme: jekyll-theme-cayman
 ---
 # Exploring Concurrent Union-Find
 ## Project Proposal
 Members: Annie Xu, Henry Liu
 
 [Home](https://anncatz1.github.io/15418projectsite/)
-[Midway Report](https://anncatz1.github.io/15418projectsite/midreport)
+
+[Proposal](https://anncatz1.github.io/15418projectsite/proposal)
 
 ### SUMMARY
 We will implement 4 versions of the Union-Find (Disjoint Set Union) data structure:
