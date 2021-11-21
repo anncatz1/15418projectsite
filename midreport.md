@@ -4,12 +4,13 @@ title: "Milestone Report"
 permalink: /midreport/
 ---
 # Exploring Concurrent Union-Find
-## Milestone Report
 Members: Annie Xu, Henry Liu
 
 [Home](https://anncatz1.github.io/15418projectsite/)
 
 [Proposal](https://anncatz1.github.io/15418projectsite/proposal)
+
+## Milestone Report
 
 ### Work Completed Currently
 
