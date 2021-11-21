@@ -10,6 +10,7 @@ theme: jekyll-theme-cayman
 Members: Annie Xu, Henry Liu
 
 [Home](https://anncatz1.github.io/15418projectsite/)
+
 [Midway Report](https://anncatz1.github.io/15418projectsite/midreport)
 
 ### SUMMARY
