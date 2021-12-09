@@ -48,9 +48,13 @@ Memory accesses and synchronization costs are the most likely reasons for poor p
 We will examine how use of atomic operations plays into things as well. Contention over accesses to the same nodes is fairly limited for most graph problems, so there will be less probability of having to retry CAS operations to access data. 
 
 ### *Tasks*
+
 We tested our data structures on the following 3 tasks:
+
 Task: COUNT
+
 Description: find # of connected components in graph
+
 Input:
 N M     <-- N nodes, M edges
 a1 b1   <-- edge from a1 to b1
@@ -62,7 +66,9 @@ Output: single int, # of connected components
 ---------------------------------------------------------------
 
 Task: QUERIES
+
 Description: answer connectivity queries in a graph
+
 Input:
 N M Q   <-- N nodes, M edges, Q queries
 a1 b1   <-- edge from a1 to b1
@@ -77,9 +83,11 @@ Output: bool[Q], answers to all queries
 ---------------------------------------------------------------
 
 Task: WORMSORT
+
 Description: maximize width of smallest wormhole cows must use
 in order to sort themselves. Full problem statement available:
 http://www.usaco.org/index.php?page=viewproblem2&cpid=992
+
 Input:
 N M   	  <-- N cows, M wormholes
 p1 ... pN   <-- initial permutation
@@ -104,19 +112,17 @@ In our coarse-grained locking algorithm, we keep a single mutex for the entire d
 
 #### *Fine-Grained Locking*
 
-	We obtained the basis for a fine-grain locking algorithm from the paper “Multicore Programming in the Face of Metamorphosis: Union-Find as an Example” by Igor Berman. This uses an “optimistic” locking approach which uses fine grained locks to coordinate any mutating operations, but there are also non-mutating operations that traverse the data structure and are lock-free. There is one lock per component i.e. per tree. The lock is at the root of the tree. When we merge multiple components together, the locks at the leaves and inner nodes become inactive and only the lock at the root remains in service. Thus, when we want to unite, we obtain the locks of the roots of the two node’s components before we mutate the trees. To avoid deadlock, we ensure that the locks are acquired in the same order (by memory address) each time. It is possible that in between traversing to the roots and obtaining the locks, other threads have done unites on those components and changed a root to be an inner node, so we must be sure that they are still roots after we obtain the lock for correctness. Once we obtain the locks on the roots, we do the same uniting steps as before, and then release the two locks on the roots. 
+We obtained the basis for a fine-grain locking algorithm from the paper “Multicore Programming in the Face of Metamorphosis: Union-Find as an Example” by Igor Berman. This uses an “optimistic” locking approach which uses fine grained locks to coordinate any mutating operations, but there are also non-mutating operations that traverse the data structure and are lock-free. There is one lock per component i.e. per tree. The lock is at the root of the tree. When we merge multiple components together, the locks at the leaves and inner nodes become inactive and only the lock at the root remains in service. Thus, when we want to unite, we obtain the locks of the roots of the two node’s components before we mutate the trees. To avoid deadlock, we ensure that the locks are acquired in the same order (by memory address) each time. It is possible that in between traversing to the roots and obtaining the locks, other threads have done unites on those components and changed a root to be an inner node, so we must be sure that they are still roots after we obtain the lock for correctness. Once we obtain the locks on the roots, we do the same uniting steps as before, and then release the two locks on the roots. 
 	
-	Here, find() is implemented as a lock-free function. This is so we can improve the speed of doing any finds while also maintaining correct concurrency. While the node is not a root, we use a CompareAndSwap primitive for path-halving. We do a CAS on the parent of the node, and we replace the node’s parent with the node’s grandparent. We then set the node equal to its grandparent. Due to this change, we now store A as a vector<atomic<int>> which supports the atomic CAS operations.
+Here, find() is implemented as a lock-free function. This is so we can improve the speed of doing any finds while also maintaining correct concurrency. While the node is not a root, we use a CompareAndSwap primitive for path-halving. We do a CAS on the parent of the node, and we replace the node’s parent with the node’s grandparent. We then set the node equal to its grandparent. Due to this change, we now store A as a vector<atomic<int>> which supports the atomic CAS operations.
 
 #### *Lock-Free*
 
-	For our find function, we take as input a node and we want to find the root. We check at the beginning of the function if the parent of the node is negative, which means it's a root, and then we return the node and its rank if that is true. We also implemented the immediate parent check optimization. This is due to the fact that it is likely that two elements that are being united have the same parent later on in the algorithm after the paths have been compressed a lot. This optimization checks whether the parent of u and v are equal in the beginning of the find operation and returns node and rank if true. This allows us to skip the more time-consuming operations if this is true. After this, we recursively call find on the parent so we go up the tree by one. We always return both the root and rank at once so they stay consistent. We also include path compression. This was described above, but again we use a CAS (in order to ensure that two threads are not concurrently updating the node) to update the parent of the original input node to point to the root. This enables faster finds in the future. 
+For our find function, we take as input a node and we want to find the root. We check at the beginning of the function if the parent of the node is negative, which means it's a root, and then we return the node and its rank if that is true. We also implemented the immediate parent check optimization. This is due to the fact that it is likely that two elements that are being united have the same parent later on in the algorithm after the paths have been compressed a lot. This optimization checks whether the parent of u and v are equal in the beginning of the find operation and returns node and rank if true. This allows us to skip the more time-consuming operations if this is true. After this, we recursively call find on the parent so we go up the tree by one. We always return both the root and rank at once so they stay consistent. We also include path compression. This was described above, but again we use a CAS (in order to ensure that two threads are not concurrently updating the node) to update the parent of the original input node to point to the root. This enables faster finds in the future. 
 
-	The sameSet function is the same idea as before, it just adds a check on if the root returned from the find is actually still a root - this will check if other threads have united either of the two nodes’ components in the midst of this function. If it’s not still a root, then we return false and we try the finds again to find the correct root.
+The sameSet function is the same idea as before, it just adds a check on if the root returned from the find is actually still a root - this will check if other threads have united either of the two nodes’ components in the midst of this function. If it’s not still a root, then we return false and we try the finds again to find the correct root.
 	
-	In our unite function, we do two finds on the two input nodes which give us the roots and the ranks of the roots. We check if they’re already in the same component, and if not, then we check which node’s rank is higher. If rank of u is smaller than rank of v, this means we want to make v the master root of the united component and we use a CAS in order to change u’s parent to be v. If rank of u is bigger than rank of v, then we do the opposite. If the ranks are equal, we then try to unite based on the index of the elements. If u < v, then we want to put u into v’s structure (u’s parent will point to v) and vice versa. Our array will return a rank if the node is a root, and we use a CAS on this number to ensure that the rank of the node is still consistent. If it is, then we change this array so that it is v instead of a rank (parent of u is now v). We do a second CAS to change the rank of v (decrementing it to “increase” the height since it’s negative). The CAS checks on whether the rank of v is still consistent. If the first CAS fails, we do not do the second CAS and will retry in the while loop. 
-
-Here again, we store A as a vector<atomic<int>> to support CAS operations.
+In our unite function, we do two finds on the two input nodes which give us the roots and the ranks of the roots. We check if they’re already in the same component, and if not, then we check which node’s rank is higher. If rank of u is smaller than rank of v, this means we want to make v the master root of the united component and we use a CAS in order to change u’s parent to be v. If rank of u is bigger than rank of v, then we do the opposite. If the ranks are equal, we then try to unite based on the index of the elements. If u < v, then we want to put u into v’s structure (u’s parent will point to v) and vice versa. Our array will return a rank if the node is a root, and we use a CAS on this number to ensure that the rank of the node is still consistent. If it is, then we change this array so that it is v instead of a rank (parent of u is now v). We do a second CAS to change the rank of v (decrementing it to “increase” the height since it’s negative). The CAS checks on whether the rank of v is still consistent. If the first CAS fails, we do not do the second CAS and will retry in the while loop. Here again, we store A as a vector<atomic<int>> to support CAS operations.
 
 #### Task: COUNT
 	
@@ -132,9 +138,9 @@ The first important reduction is that we can interpret the scenario as a graph. 
 
 ### RESULTS: 
 
-	We produced graphs of the performance on three different problem sizes for each of our three tasks and included change in performance as thread count changes. As expected, coarse-grained performed the worst out of the three (coarse-grained, fine-grained, lock-free). This would be due to essentially serializing the operations one can perform on the data structure as only one thread can operate at a time. Coarse-grain also suffers from the synchronization time of obtaining and releasing locks. Fine-grained performed better on average than coarse-grained, and lock-free performed the best out of the three. Comparing the performance of the sequential algorithm, we actually found that sequential was better than both fine-grained and coarse-grained locking. We reasoned that the overhead of taking and releasing locks was very high and there may be high contention for the fine-grained locking scheme. The lock-free implementation, however, achieved up to 3x speedup over sequential on certain tasks, indicating that using a lock-free implementation for concurrency is beneficial. 
+We produced graphs of the performance on three different problem sizes for each of our three tasks and included change in performance as thread count changes. As expected, coarse-grained performed the worst out of the three (coarse-grained, fine-grained, lock-free). This would be due to essentially serializing the operations one can perform on the data structure as only one thread can operate at a time. Coarse-grain also suffers from the synchronization time of obtaining and releasing locks. Fine-grained performed better on average than coarse-grained, and lock-free performed the best out of the three. Comparing the performance of the sequential algorithm, we actually found that sequential was better than both fine-grained and coarse-grained locking. We reasoned that the overhead of taking and releasing locks was very high and there may be high contention for the fine-grained locking scheme. The lock-free implementation, however, achieved up to 3x speedup over sequential on certain tasks, indicating that using a lock-free implementation for concurrency is beneficial. 
 
-	As we can see from the three different problem sizes, if the problem is too small there is no benefit to using more thread counts at all. For the medium and big problem sizes, we see a general trend for fine-grained and lock-free that the performance improves as thread count increases. However, for coarse-grained, the performance worsens as thread count increases. This is due to the fact that only one thread can operate at a time on the union-find structure so with more threads there’s just more threads waiting to operate and no performance benefit. For some of the tasks/problem sizes, we see that using 12 threads is a little worse than the sweet spot of using 8-10 threads for both fine-grained/lock-free. This may be due to our problems not being big enough to really see the benefit using more and more thread counts. 
+As we can see from the three different problem sizes, if the problem is too small there is no benefit to using more thread counts at all. For the medium and big problem sizes, we see a general trend for fine-grained and lock-free that the performance improves as thread count increases. However, for coarse-grained, the performance worsens as thread count increases. This is due to the fact that only one thread can operate at a time on the union-find structure so with more threads there’s just more threads waiting to operate and no performance benefit. For some of the tasks/problem sizes, we see that using 12 threads is a little worse than the sweet spot of using 8-10 threads for both fine-grained/lock-free. This may be due to our problems not being big enough to really see the benefit using more and more thread counts. 
 
 #### Count Problem Sizes
 - Small: Vertices: 10, Edges: 5
