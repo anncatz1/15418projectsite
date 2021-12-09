@@ -10,6 +10,8 @@ Members: Annie Xu, Henry Liu
 
 [Proposal](https://anncatz1.github.io/15418projectsite/proposal)
 
+[Final Report](https://anncatz1.github.io/15418projectsite/finalreport)
+
 ## Milestone Report
 
 ### Work Completed Currently
