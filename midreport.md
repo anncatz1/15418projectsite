@@ -27,7 +27,6 @@ We will show graphs comparing the different versions of union-find and their per
 We are a little worried about completing the coding work on time given how quickly the end of the semester is approaching but otherwise we don’t see any issues. 
 
 ### New Schedule
-### Schedule 
 
 Week 1: Oct 31 - Nov 6
 - **Due: Proposal due Nov 3rd**
