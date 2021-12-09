@@ -2,6 +2,7 @@
 layout: default
 title: "Final Report"
 permalink: /finalreport/
+filename: finalReport.md
 ---
 # Exploring Concurrent Union-Find
 Members: Annie Xu, Henry Liu
