@@ -12,6 +12,8 @@ Members: Annie Xu, Henry Liu
 
 [Milestone Report](https://anncatz1.github.io/15418projectsite/midreport)
 
+[Final Report](https://anncatz1.github.io/15418projectsite/finalreport)
+
 ## Project Proposal
 
 ### SUMMARY
