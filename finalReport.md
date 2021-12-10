@@ -17,7 +17,7 @@ Members: Annie Xu, Henry Liu
 
 ### ABSTRACT: 
 
-We implemented four versions of the Union-Find (Disjoint Set Union) data structure: serial, coarse-grained locking, fine-grained locking, and lock-free. We compared the performance of these implementations against a variety of test inputs and problem tasks to demonstrate the application of and motivation behind Lock-Free Union-Find. We produced performance graphs of different problem sizes of the three problem tasks we used. 
+We implemented five versions of the Union-Find (Disjoint Set Union) data structure: serial, coarse-grained locking, fine-grained locking, lock-free, and software transactional memory. We compared the performance of these implementations against a variety of test inputs and problem tasks to demonstrate the application of and motivation behind Lock-Free Union-Find. We produced performance graphs of different problem sizes of the three problem tasks we used. 
 
 ### BACKGROUND: 
 
@@ -30,8 +30,7 @@ Our goal is to produce a fast, correct, and thread-safe implementation of Union-
 Our general data structure involves trees to represent the connected components, while the root of each tree acts as the representative of the identity for the component. To perform a find(), we will traverse upwards through the tree to track down the root of the component. To unite() a pair of sets, we attach the root of one set to the root of the other, resulting in a larger merged tree. The trees may be implemented via a parent array, with -1’s to indicate roots.
 
 #### *Optimizations*
-In order to support some of the efficiency measures down the line, it’s also crucial to keep track of the rank of each set, or the height of the trees. Traditionally, this is accomplished with a separate array. However, we have made a small optimization here in the memory representation – because we only need the ranks of full trees and not subtrees, we can store the ranks within our parent array at each root as negative integers to differentiate it from the positive indices at other nodes.
-The main axis of optimization is in controlling our tree structure.
+In order to support some of the efficiency measures down the line, it’s also crucial to keep track of the rank of each set, or the height of the trees. Traditionally, this is accomplished with a separate array. However, we have made a small optimization here in the memory representation – because we only need the ranks of full trees and not subtrees, we can store the ranks within our parent array at each root as negative integers to differentiate it from the positive indices at other nodes. By using a single array to maintain this information, we can reduce the number of total memory accesses and improve the locality of our data structures. The main axis of optimization is in controlling our tree structure.
 
 **Union-by-rank:** always connect shorter trees to taller ones. Since the time complexity of find() and union() are bounded by the height of the trees, it follows that we should take measures to control the growth in height of our trees. By connecting smaller trees to taller ones, we have not created any taller trees in this union event! Union-by-rank allows us to avoid degenerate tree structures and facilitates a fast average traversal on find() operations.
 
@@ -99,7 +98,7 @@ Output: single int, largest minimum width of wormhole to sort
 
 ### APPROACH:
 
-We touched on a portion of the C++ standard library’s parallelism support in class, but didn’t have a chance to experiment with it. So, we decided to implement the entire project in pure C++, heavily utilizing the <atomic>, <mutex> and <thread> headers. We modeled our base code off of the paper “In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval. 
+We touched on a portion of the C++ standard library’s parallelism support in class, but didn’t have a chance to experiment with it. So, we decided to implement the entire project in pure C++, heavily utilizing the <atomic>, <mutex> and <thread> headers. We modeled our base code off of the paper “In Search of the Fastest Concurrent Union-Find Algorithm” by Alistarh, Federov, Koval. We performed testing on various machines, but our final results are based on a 16-in MacBook Pro 2019, with 2.6 GHz 6-Core Intel Core i7, with 12 hardware contexts.
 As above, we represent our union-find data structures with a vector<int>. Each node is represented at an index of the array, and the element at that index represents the parents of the node. If the node is a root of the tree, then we do not have a parent and instead record the rank of that set as a negative number. When we use union-by-rank, the (absolute value) of the number in the “parent” array for any root node is the rank at the root (or height of the tree). 
 
 #### *Sequential*
@@ -123,6 +122,10 @@ For our find function, we take as input a node and we want to find the root. We 
 The sameSet function is the same idea as before, it just adds a check on if the root returned from the find is actually still a root - this will check if other threads have united either of the two nodes’ components in the midst of this function. If it’s not still a root, then we return false and we try the finds again to find the correct root.
 	
 In our unite function, we do two finds on the two input nodes which give us the roots and the ranks of the roots. We check if they’re already in the same component, and if not, then we check which node’s rank is higher. If rank of u is smaller than rank of v, this means we want to make v the master root of the united component and we use a CAS in order to change u’s parent to be v. If rank of u is bigger than rank of v, then we do the opposite. If the ranks are equal, we then try to unite based on the index of the elements. If u < v, then we want to put u into v’s structure (u’s parent will point to v) and vice versa. Our array will return a rank if the node is a root, and we use a CAS on this number to ensure that the rank of the node is still consistent. If it is, then we change this array so that it is v instead of a rank (parent of u is now v). We do a second CAS to change the rank of v (decrementing it to “increase” the height since it’s negative). The CAS checks on whether the rank of v is still consistent. If the first CAS fails, we do not do the second CAS and will retry in the while loop. Here again, we store A as a vector<atomic<int>> to support CAS operations.
+	
+#### *Software Transactional Memory*
+
+This variant was a bonus element. C++ has some built-in support for software transactional memory via the -fgnu-tm flag. To implement the data structure, we simply wrapped each mutating function in a synchronized block. Unfortunately, this support in C++ is still experimental and unoptimized, and our preliminary testing showed that though it was correct, its performance was noticeably worse than naive coarse-grained locking. As a result, we have excluded it from the rest of our results.
 
 #### Task: COUNT
 	
